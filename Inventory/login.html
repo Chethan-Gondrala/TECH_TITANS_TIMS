@@ -4,23 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - Role Based Access</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="CSS.css">
 </head>
 <body>
-  <div class="login-container">
+  <video autoplay loop muted class="background-video">
+    <source src="assets/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  
+  <div class="title">
+    <h1>TECH TITANS TIMS</h1>
+  </div>
+  
+  <div class="login_container">
     <h2>Login</h2>
     <form id="loginForm" onsubmit="handleLogin(event)">
-      <label for="username">Username<span style="color: red;">*</span></label>
+      <label for="username">Username</label>
       <input type="text" id="username" name="username" required placeholder="Enter your username">
-<br>
-      <label for="password">Password<span style="color: red;">*</span></label><br>
-
+      <br>
+      <label for="password">Password</label><br>
       <input type="password" id="password" name="password" required placeholder="Enter your password">
-
+      <br>
       <button type="submit">Login</button>
     </form>
     <p id="error-message" style="color: red; display: none;">Invalid username or password.</p>
   </div>
+  
+ 
+  <div class="bottom-div">
+    <p>&copy; 2025 All rights reserved | Developed by TECH_TITANS</p>
+  </div>
+
   <script src="login.js"></script>
 </body>
 </html>
