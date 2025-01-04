@@ -8,7 +8,7 @@
 </head>
 <body>
   <video autoplay loop muted class="background-video">
-    <source src="assets/background.mp4" type="video/mp4">
+    <source src="https://github.com/Chethan-Gondrala/TECH_TITANS_TIMS/blob/main/freecompress-WhatsApp%20Video%202025-01-04%20at%2013.27.40_d95d7d3d%20(1).mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
   
