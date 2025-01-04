@@ -1,0 +1,85 @@
+from flask import Flask, request, render_template, redirect, url_for
+import mysql.connector
+
+app = Flask(_name_)
+
+# Configure MySQL database connection
+db_connection = mysql.connector.connect(
+    host="localhost",        # MySQL server address
+    user="root",    # Your MySQL username
+    password="",# Your MySQL password
+    database=""    # Your database name
+)
+
+def run_sql_file_once():
+    cursor = None
+    try:
+        # Connect to the database
+        connection = db_connection
+        cursor = connection.cursor()
+
+        # Read the SQL file
+        with open('tims.sql', 'r') as file:
+            sql_script = file.read()
+
+        # Execute each SQL statement in the file
+        for statement in sql_script.split(';'):
+            if statement.strip():  # Ignore empty lines
+                cursor.execute(statement)
+
+        connection.commit()
+        print("SQL setup file executed successfully!")
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+# Function to insert data from the form into the database
+def insert_into_database(id, name):
+    cursor = None
+    try:
+        # Connect to the database
+        connection = db_connection
+        cursor = connection.cursor()
+
+        # Insert data into the database
+        query = "INSERT INTO staff (staff_id, staff_name) VALUES (%s, %s)"
+        values = (id, name)
+        cursor.execute(query, values)
+
+        connection.commit()
+
+        print("Data inserted successfully!")
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+
+
+@app.route('/')
+def home():
+    return render_template('login.html')  # Render the HTML form
+
+@app.route('/submit', methods=['POST'])
+def submit_form():
+    # Get values from the form
+    name = request.form['name']
+    id = request.form['id']
+    
+    insert_into_database(id,name)
+    
+    return redirect(url_for('home'))
+
+if _name_ == "_main_":
+
+    run_sql_file_once()
+
+    app.run(debug=True)
