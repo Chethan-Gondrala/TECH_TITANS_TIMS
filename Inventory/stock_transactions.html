@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Transactions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        .navbar {
+            background-color: #333;
+            padding: 1rem;
+            color: #fff;
+            text-align: center;
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Manager Dashboard - Stock Transactions</h1>
+    </div>
+    <div class="container">
+        <h2>Record Stock Transaction</h2>
+        <form id="transactionForm">
+            <div class="form-group">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" required>
+            </div>
+            <div class="form-group">
+                <label for="transactionType">Transaction Type</label>
+                <select id="transactionType" required>
+                    <option value="Stock In">Stock In</option>
+                    <option value="Stock Out">Stock Out</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" min="1" required>
+            </div>
+            <button type="submit">Record Transaction</button>
+        </form>
+        <h2>Transaction History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Transaction Type</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="transactionTable">
+                <tr>
+                    <td colspan="4" style="text-align: center;">No transactions recorded yet</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const transactionForm = document.getElementById('transactionForm');
+        const transactionTable = document.getElementById('transactionTable');
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        transactionForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const productName = document.getElementById('productName').value;
+            const transactionType = document.getElementById('transactionType').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const date = new Date().toLocaleDateString();
+            if (!productName || !transactionType || isNaN(quantity)) {
+                alert('Please fill in all fields correctly!');
+                return;
+            }
+            transactions.push({ productName, transactionType, quantity, date });
+
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            transactionForm.reset();
+            renderTransactions();
+        });
+        function renderTransactions() {
+            transactionTable.innerHTML = '';
+            if (transactions.length === 0) {
+                transactionTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">No transactions recorded yet</td></tr>';
+                return;
+            }
+            transactions.forEach((transaction) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.productName}</td>
+                    <td>${transaction.transactionType}</td>
+                    <td>${transaction.quantity}</td>
+                    <td>${transaction.date}</td>`;
+                transactionTable.appendChild(row);
+            });
+        }
+        renderTransactions();
+    </script>
+</body>
+</html>
